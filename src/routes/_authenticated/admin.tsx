@@ -30,7 +30,7 @@ function AdminLayout() {
     queryKey: ["property-settings"],
     queryFn: () => fetchSettings(),
   });
-  const brandName = settingsData?.settings.displayName?.trim() || "Revoo";
+  const brandName = settingsData?.settings.displayName?.trim() || "StageHomy";
   const { location } = useRouterState();
 
   if (isLoading) {
