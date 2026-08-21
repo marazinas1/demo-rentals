@@ -168,8 +168,9 @@ export type Database = {
           id: string
           infants_count: number
           is_vat_payer: boolean
-          language: string
           location: string
+          mileage_in: number | null
+          mileage_out: number | null
           note: string | null
           payment_amount: number
           payment_option: string
@@ -177,7 +178,11 @@ export type Database = {
           payment_provider: string | null
           payment_reference: string | null
           payment_status: string
+          pickup_location: string
+          pickup_time: string
           property_id: string
+          return_location: string
+          return_time: string
           source: string
           status: string
           total_amount: number
@@ -214,8 +219,9 @@ export type Database = {
           id?: string
           infants_count?: number
           is_vat_payer?: boolean
-          language?: string
           location?: string
+          mileage_in?: number | null
+          mileage_out?: number | null
           note?: string | null
           payment_amount?: number
           payment_option?: string
@@ -223,7 +229,11 @@ export type Database = {
           payment_provider?: string | null
           payment_reference?: string | null
           payment_status?: string
+          pickup_location?: string
+          pickup_time?: string
           property_id: string
+          return_location?: string
+          return_time?: string
           source?: string
           status?: string
           total_amount?: number
@@ -260,8 +270,9 @@ export type Database = {
           id?: string
           infants_count?: number
           is_vat_payer?: boolean
-          language?: string
           location?: string
+          mileage_in?: number | null
+          mileage_out?: number | null
           note?: string | null
           payment_amount?: number
           payment_option?: string
@@ -269,7 +280,11 @@ export type Database = {
           payment_provider?: string | null
           payment_reference?: string | null
           payment_status?: string
+          pickup_location?: string
+          pickup_time?: string
           property_id?: string
+          return_location?: string
+          return_time?: string
           source?: string
           status?: string
           total_amount?: number
@@ -286,6 +301,157 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      car_investments: {
+        Row: {
+          amount: number
+          car_id: string
+          category: string
+          created_at: string
+          id: string
+          mileage_km: number | null
+          note: string
+          purchase_date: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          car_id: string
+          category?: string
+          created_at?: string
+          id?: string
+          mileage_km?: number | null
+          note?: string
+          purchase_date?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          car_id?: string
+          category?: string
+          created_at?: string
+          id?: string
+          mileage_km?: number | null
+          note?: string
+          purchase_date?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "car_investments_car_id_fkey"
+            columns: ["car_id"]
+            isOneToOne: false
+            referencedRelation: "cars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      car_maintenance: {
+        Row: {
+          car_id: string
+          created_at: string
+          due_date: string | null
+          due_mileage_km: number | null
+          id: string
+          last_done_at: string | null
+          note: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          car_id: string
+          created_at?: string
+          due_date?: string | null
+          due_mileage_km?: number | null
+          id?: string
+          last_done_at?: string | null
+          note?: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          car_id?: string
+          created_at?: string
+          due_date?: string | null
+          due_mileage_km?: number | null
+          id?: string
+          last_done_at?: string | null
+          note?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "car_maintenance_car_id_fkey"
+            columns: ["car_id"]
+            isOneToOne: false
+            referencedRelation: "cars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cars: {
+        Row: {
+          category: string
+          consumption: string
+          cover_image_url: string
+          created_at: string
+          features: Json
+          fuel: string
+          id: string
+          image_urls: Json
+          is_active: boolean
+          mileage_policy: string
+          name: string
+          price_per_day: number
+          price_tiers: Json
+          seats: number
+          sort_order: number
+          transmission: string
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          category: string
+          consumption?: string
+          cover_image_url?: string
+          created_at?: string
+          features?: Json
+          fuel: string
+          id?: string
+          image_urls?: Json
+          is_active?: boolean
+          mileage_policy?: string
+          name: string
+          price_per_day: number
+          price_tiers?: Json
+          seats?: number
+          sort_order?: number
+          transmission: string
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          category?: string
+          consumption?: string
+          cover_image_url?: string
+          created_at?: string
+          features?: Json
+          fuel?: string
+          id?: string
+          image_urls?: Json
+          is_active?: boolean
+          mileage_policy?: string
+          name?: string
+          price_per_day?: number
+          price_tiers?: Json
+          seats?: number
+          sort_order?: number
+          transmission?: string
+          updated_at?: string
+          year?: number
+        }
+        Relationships: []
       }
       content_templates: {
         Row: {
@@ -345,7 +511,7 @@ export type Database = {
           lang: string
           updated_at?: string
           updated_by?: string | null
-          value?: string
+          value: string
         }
         Update: {
           entity_id?: string
@@ -464,15 +630,7 @@ export type Database = {
           property_id?: string
           service_date?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "housekeeping_comments_property_id_fkey"
-            columns: ["property_id"]
-            isOneToOne: false
-            referencedRelation: "properties"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       housekeeping_tasks: {
         Row: {
@@ -508,15 +666,7 @@ export type Database = {
           updated_at?: string
           updated_by?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "housekeeping_tasks_property_id_fkey"
-            columns: ["property_id"]
-            isOneToOne: false
-            referencedRelation: "properties"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       invoices: {
         Row: {
@@ -1042,7 +1192,6 @@ export type Database = {
           review_link: string | null
           review_request_hours_after: number
           scope: string
-          stayover_clean_every_days: number
           timezone: string
           updated_at: string
           updated_by: string | null
@@ -1118,7 +1267,6 @@ export type Database = {
           review_link?: string | null
           review_request_hours_after?: number
           scope?: string
-          stayover_clean_every_days?: number
           timezone?: string
           updated_at?: string
           updated_by?: string | null
@@ -1194,7 +1342,6 @@ export type Database = {
           review_link?: string | null
           review_request_hours_after?: number
           scope?: string
-          stayover_clean_every_days?: number
           timezone?: string
           updated_at?: string
           updated_by?: string | null
@@ -1215,9 +1362,7 @@ export type Database = {
           assigned_at: string | null
           assigned_to: string | null
           created_at: string
-          has_issue: boolean
           id: string
-          issue_note: string
           note: string
           property_id: string
           status: string
@@ -1228,9 +1373,7 @@ export type Database = {
           assigned_at?: string | null
           assigned_to?: string | null
           created_at?: string
-          has_issue?: boolean
           id?: string
-          issue_note?: string
           note?: string
           property_id: string
           status?: string
@@ -1241,9 +1384,7 @@ export type Database = {
           assigned_at?: string | null
           assigned_to?: string | null
           created_at?: string
-          has_issue?: boolean
           id?: string
-          issue_note?: string
           note?: string
           property_id?: string
           status?: string

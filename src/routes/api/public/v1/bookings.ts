@@ -143,7 +143,6 @@ export const Route = createFileRoute("/api/public/v1/bookings")({
                 bic: d.bic ?? null,
                 expires_at: expiresAt,
                 booking_number: "",
-                language: lang,
                 extras: quote.extras,
                 extras_total: quote.extras_total,
               })

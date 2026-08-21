@@ -148,17 +148,17 @@ function LoginPage() {
           {branding?.logoUrl ? (
             <img
               src={branding.logoUrl}
-              alt={branding.displayName || PLATFORM_NAME}
+              alt="Demo"
               className="max-h-40 w-auto max-w-[22rem] object-contain drop-shadow-sm"
             />
           ) : (
             <span className="text-4xl font-bold tracking-tight text-foreground">
-              {branding?.displayName || PLATFORM_NAME}
+              Demo
             </span>
           )}
           {branding?.logoUrl && branding.displayName ? (
             <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground">
-              {branding.displayName}
+              Demo
             </p>
           ) : null}
         </div>
