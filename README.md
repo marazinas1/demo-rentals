@@ -1,12 +1,14 @@
-# Demo-Rentals
+# Rentivo for Property rent
 
-Create a minimal TanStack Start project with TypeScript and Tailwind CSS. A single blank page showing the word "Demo". Do not add any backend, database, authentication, or additional pages.
+Sukurk automobilių nuomos puslapį, kuris vadinasi rentivo. Puslapyje turi galėti pasirinkti auto paėmimo vietą, datą nuo, data iki. Pagal dienų skaičių turi būti atfiltruojami laisvi nuomoje esantys automobiliai. Kol nesuvedi datų turi būti matomi visi automobiliI
 
 This project was built with [Lovable](https://lovable.dev).
 
+**Live app**: https://dharmastay.lovable.app
+
 ## Build with Lovable
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/12af7e2e-3769-4f37-b105-ecca34496fec).
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/3b144e50-7336-4c5e-a93d-7aeca70328ba).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
 - **Stay in sync**: every change made in Lovable is committed straight to this repository.

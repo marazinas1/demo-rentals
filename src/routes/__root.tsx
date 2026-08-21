@@ -4,13 +4,28 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
+import "@/i18n";
+import { LanguageProvider } from "@/components/LanguageProvider";
+import { Toaster } from "@/components/ui/sonner";
+import { BookingProvider } from "@/components/site/BookingDialog";
+import { SiteHeader } from "@/components/site/SiteHeader";
+import { SiteFooter } from "@/components/site/SiteFooter";
+import { useRememberedLocaleRedirect } from "@/components/site/LanguageSwitcher";
+import { useLocale } from "@/content";
+import { htmlLang } from "@/lib/locale";
+
+/** Core (administravimo / personalo) maršrutai neturi svetainės antraštės ir poraštės. */
+const CORE_PREFIXES = ["/admin", "/staff", "/auth", "/reset-password", "/api"];
+
+function isCorePath(pathname: string) {
+  return CORE_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+}
 
 function NotFoundComponent() {
   return (
@@ -37,9 +52,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -77,21 +89,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { name: "author", content: "Revoo" },
+      { name: "verify-paysera", content: "65ba259f39f5e43f2f7bc2247ef7158f" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
     ],
   }),
   shellComponent: RootShell,
@@ -100,9 +108,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
-function RootShell({ children }: { children: ReactNode }) {
+function RootShell({ children }: { children: React.ReactNode }) {
+  const locale = useLocale();
   return (
-    <html lang="en">
+    <html lang={htmlLang[locale]}>
       <head>
         <HeadContent />
       </head>
@@ -116,11 +125,33 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  useRememberedLocaleRedirect();
+
+  if (isCorePath(pathname)) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <LanguageProvider>
+          <Outlet />
+          <Toaster />
+        </LanguageProvider>
+      </QueryClientProvider>
+    );
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <div className="site-theme min-h-screen bg-background text-foreground">
+        <BookingProvider>
+          <SiteHeader />
+          <main>
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+          </main>
+          <SiteFooter />
+        </BookingProvider>
+      </div>
+      <Toaster />
     </QueryClientProvider>
   );
 }
