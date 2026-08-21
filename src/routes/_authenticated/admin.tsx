@@ -89,7 +89,7 @@ function AdminLayout() {
       <div className="mt-auto space-y-1 border-t border-sidebar-border px-2 py-3 text-sidebar-foreground">
           <LanguageSwitcher />
           <a
-            href="https://dharma.revoo.lt/"
+            href="https://demo-rentals.stagehomy.com/"
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setNavOpen(false)}
