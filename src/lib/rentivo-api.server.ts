@@ -40,7 +40,16 @@ function currentHost(): string | null {
 }
 
 async function rentivoFetch(path: string, init?: RequestInit): Promise<unknown> {
-  const { baseUrl, apiKey } = resolveRentivoConfig(currentHost());
+  let config: { baseUrl: string; apiKey: string };
+  try {
+    config = resolveRentivoConfig(currentHost());
+  } catch (error) {
+    // No API credentials configured yet — surface a typed error so callers can
+    // render their own empty/error state instead of crashing the page.
+    console.error("[rentivo] missing configuration", error);
+    throw new RentivoError("config_missing", 503, "Rentivo API key is not configured");
+  }
+  const { baseUrl, apiKey } = config;
 
   let response: Response;
   try {
