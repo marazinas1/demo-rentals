@@ -73,7 +73,7 @@ export function propertyRoute(locale: Locale) {
         if (slug !== params.propertyId) {
           throw redirect({
             to: localizePath("/apartamentai/$propertyId", locale) as never,
-            params: { propertyId: slug },
+            params: { propertyId: slug } as any,
             search: search as never,
             statusCode: 301,
           });
@@ -93,7 +93,7 @@ export function propertyRoute(locale: Locale) {
         if (localSlug && localSlug !== params.propertyId) {
           throw redirect({
             to: localizePath("/apartamentai/$propertyId", locale) as never,
-            params: { propertyId: localSlug },
+            params: { propertyId: localSlug } as any,
             search: search as never,
           });
         }
