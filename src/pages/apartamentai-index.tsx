@@ -38,7 +38,7 @@ export function staysIndexRoute(locale: Locale) {
       if (search.category) {
         throw redirect({
           to: localizePath("/apartamentai/tipas/$categorySlug", locale) as never,
-          params: { categorySlug: categorySlug(search.category) },
+          params: { categorySlug: categorySlug(search.category) } as any,
           statusCode: 301,
         });
       }
